@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace STTech.BytesIO.Modbus
 {
     /// <summary>
-    /// Modbus虚拟客户端
+    /// Modbus客户端基类
     /// </summary>
     public abstract partial class ModbusClient : VirtualClient
     {
