@@ -5,3 +5,8 @@
 
 
 [STTech.BytesIO仓库](https://github.com/landriesnidis/STTech.BytesIO)
+
+
+---
+[Modbus 通信库](https://github.com/ApeFree/ApeFree.BytesIO.Extensions/tree/main/STTech.BytesIO.Modbus)
+UDP/TCP/SerialPort的ASCII/RTU通信
