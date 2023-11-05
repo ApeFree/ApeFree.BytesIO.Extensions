@@ -21,7 +21,7 @@ namespace STTech.BytesIO.Modbus
         {
         }
 
-        public override byte[] GetBytes()
+        public override void SerializePayload()
         {
             var temp = Data ? CoilOn : CoilOff;
             var value = BitConverter.GetBytes(temp).Reverse();
@@ -29,7 +29,6 @@ namespace STTech.BytesIO.Modbus
             bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());
             bytes.AddRange(value);
             Payload = bytes.ToArray();
-            return base.GetBytes();
         }
     }
 }

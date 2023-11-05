@@ -14,6 +14,11 @@ namespace STTech.BytesIO.Modbus
         /// </summary>
         public Unpacker<ModbusResponse> Unpacker { get; }
 
+        /// <summary>
+        /// Modbus协议格式
+        /// </summary>
+        public ModbusProtocolFormat ProtocolFormat { get; set; }
+
         protected ModbusClient(BytesClient client) : base(client)
         {
             Unpacker = new ModbusUnpacker(this);
@@ -25,92 +30,104 @@ namespace STTech.BytesIO.Modbus
 
     public abstract partial class ModbusClient : IModbusClient
     {
+        // 
+
+
         public Reply<ReadCoilRegisterResponse> ReadCoilRegister(ReadCoilRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<ReadCoilRegisterResponse>();
         }
 
         public Reply<ReadCoilRegisterResponse> ReadCoilRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
-            return this.ReadCoilRegister(new ReadCoilRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length }, timeout, options);
+
+            return this.ReadCoilRegister(new ReadCoilRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length,ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         public Reply<ReadDiscreteInputRegisterResponse> ReadDiscreteInputRegister(ReadDiscreteInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<ReadDiscreteInputRegisterResponse>();
         }
 
         public Reply<ReadDiscreteInputRegisterResponse> ReadDiscreteInputRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
-            return this.ReadDiscreteInputRegister(new ReadDiscreteInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length }, timeout, options);
+            return this.ReadDiscreteInputRegister(new ReadDiscreteInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         public Reply<ReadHoldRegisterResponse> ReadHoldRegister(ReadHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<ReadHoldRegisterResponse>();
         }
 
         public Reply<ReadHoldRegisterResponse> ReadHoldRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
-            return this.ReadHoldRegister(new ReadHoldRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length }, timeout, options);
+            return this.ReadHoldRegister(new ReadHoldRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         public Reply<ReadInputRegisterResponse> ReadInputRegister(ReadInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<ReadInputRegisterResponse>();
         }
 
         public Reply<ReadInputRegisterResponse> ReadInputRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
-            return this.ReadInputRegister(new ReadInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length }, timeout, options);
+            return this.ReadInputRegister(new ReadInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length , ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         public Reply<WriteSingleCoilRegisterResponse> WriteSingleCoilRegister(WriteSingleCoilRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<WriteSingleCoilRegisterResponse>();
         }
 
         public Reply<WriteSingleCoilRegisterResponse> WriteSingleCoilRegister(byte slaveId, ushort writeAddress, bool data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteSingleCoilRegister(new WriteSingleCoilRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data });
+            return this.WriteSingleCoilRegister(new WriteSingleCoilRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data , ProtocolFormat = ProtocolFormat });
         }
 
         public Reply<WriteSingleHoldRegisterResponse> WriteSingleHoldRegister(WriteSingleHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<WriteSingleHoldRegisterResponse>();
         }
 
         public Reply<WriteSingleHoldRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data });
+            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat });
         }
 
         public Reply<WriteMultipleCoilRegistersResponse> WriteMultipleCoilRegisters(WriteMultipleCoilRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<WriteMultipleCoilRegistersResponse>();
         }
 
         public Reply<WriteMultipleCoilRegistersResponse> WriteMultipleCoilRegisters(byte slaveId, ushort writeAddress, bool[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteMultipleCoilRegisters(new WriteMultipleCoilRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data });
+            return this.WriteMultipleCoilRegisters(new WriteMultipleCoilRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data , ProtocolFormat = ProtocolFormat });
         }
 
         public Reply<WriteMultipleHoldRegistersResponse> WriteMultipleHoldRegisters(WriteMultipleHoldRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
+            request.ProtocolFormat = ProtocolFormat;
             var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
             return reply.ConvertTo<WriteMultipleHoldRegistersResponse>();
         }
 
         public Reply<WriteMultipleHoldRegistersResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort writeLength, byte[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, WriteLength = writeLength, Data = data, });
+            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, WriteLength = writeLength, Data = data, ProtocolFormat =ProtocolFormat});
         }
     }
 
@@ -272,8 +289,16 @@ namespace STTech.BytesIO.Modbus
                 case FunctionCode.WriteMultipleHoldRegisters:
                     RaiseWriteMultipleHoldRegistersPacketReceived(sender, new PacketReceivedEventArgs<WriteMultipleHoldRegistersResponse>(new WriteMultipleHoldRegistersResponse(e.Data.GetOriginalData())));
                     break;
-
             }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum ModbusProtocolFormat
+    {
+        RTU,
+        ASCII
     }
 }

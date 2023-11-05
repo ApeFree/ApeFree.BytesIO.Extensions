@@ -8,7 +8,7 @@ namespace STTech.BytesIO.Modbus
     {
         public byte SlaveId { get; }
         public FunctionCode FunctionCode { get; }
-        public IEnumerable<byte> Crc { get; }
+        public IEnumerable<byte> Checksum { get; }
 
         protected IEnumerable<byte> Payload { get; }
 
@@ -19,7 +19,7 @@ namespace STTech.BytesIO.Modbus
             var arr = bytes.Skip(2);
             var payloadLen = arr.Count() - 2;
             Payload = arr.Take(payloadLen);
-            Crc = bytes.Skip(payloadLen);
+            Checksum = bytes.Skip(payloadLen);
         }
     }
 

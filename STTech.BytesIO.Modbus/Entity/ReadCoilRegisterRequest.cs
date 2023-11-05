@@ -17,14 +17,12 @@ namespace STTech.BytesIO.Modbus
         [Description("读取长度")]
         public ushort Length { get; set; } = 1;
 
-        public override byte[] GetBytes()
+        public override void SerializePayload()
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(StartAddress).Reverse());
             bytes.AddRange(BitConverter.GetBytes(Length).Reverse());
             Payload = bytes.ToArray();
-
-            return base.GetBytes();
         }
     }
 

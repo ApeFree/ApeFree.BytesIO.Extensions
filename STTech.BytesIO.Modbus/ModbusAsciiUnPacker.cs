@@ -1,25 +1,24 @@
-﻿using STTech.BytesIO.Core;
-using STTech.BytesIO.Core.Component;
+﻿using STTech.BytesIO.Core.Component;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace STTech.BytesIO.Modbus
 {
-    /// <summary>
-    /// Modbus协议解包器
-    /// </summary>
-    public class ModbusUnpacker : Unpacker<ModbusResponse>
+    internal class ModbusAsciiUnPacker : Unpacker<ModbusResponse>
     {
-        public ModbusUnpacker(ModbusClient client) : base(client, CalculatePacketLengthHandler)
+        public ModbusAsciiUnPacker(ModbusClient client) : base(client, CalculatePacketLengthHandler)
         {
 
         }
 
-        const int slaveIdLen = 1;
+        const int startCharLen = 1;
+        const int slaveIdLen =1;
         const int functionCodeLen = 1;
-        const int crcLen = 2;
-        const int fixedHead = slaveIdLen + functionCodeLen;
+        const int crcLen = 1;
+        const int fixedHead = startCharLen+slaveIdLen + functionCodeLen;
         private static int CalculatePacketLengthHandler(IEnumerable<byte> bytes)
         {
             if (bytes.Count() < 2)
@@ -27,8 +26,7 @@ namespace STTech.BytesIO.Modbus
                 return 0;
             }
 
-
-            switch ((FunctionCode)(short)(bytes.Skip(1).First()))
+            switch ((FunctionCode)bytes.Skip(2).First())
             {
                 case FunctionCode.ReadCoilRegister:
                 case FunctionCode.ReadDiscreteInputRegister:

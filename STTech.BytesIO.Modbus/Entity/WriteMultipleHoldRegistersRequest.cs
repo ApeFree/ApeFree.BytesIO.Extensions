@@ -22,7 +22,7 @@ namespace STTech.BytesIO.Modbus
 
         }
 
-        public override byte[] GetBytes()
+        public override void SerializePayload()
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());
@@ -30,7 +30,6 @@ namespace STTech.BytesIO.Modbus
             bytes.Add((byte)Data.Length);
             bytes.AddRange(Data.Reverse());
             Payload = bytes.ToArray();
-            return base.GetBytes();
         }
     }
 }
