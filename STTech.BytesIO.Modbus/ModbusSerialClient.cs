@@ -10,17 +10,12 @@ namespace STTech.BytesIO.Modbus
     /// <summary>
     /// Modbus RTU 客户端
     /// </summary>
-    public partial class ModbusRtuClient : ModbusClient, IModbusClient
+    public partial class ModbusSerialClient : ModbusClient<SerialClient>, IModbusClient
     {
-        public new SerialClient InnerClient { get; }
-        public SerialClient GetInnerClient() => InnerClient;
-        public ModbusRtuClient() : base(new SerialClient())
-        {
-            InnerClient = (SerialClient)base.InnerClient;
-        }
+        public ModbusSerialClient(ModbusProtocolFormat format) : base(new SerialClient(), format) { }
     }
 
-    public partial class ModbusRtuClient : ISerialClient
+    public partial class ModbusSerialClient : ISerialClient
     {
         /// <inheritdoc/>
         public Handshake Handshake { get => InnerClient.Handshake; set => InnerClient.Handshake = value; }

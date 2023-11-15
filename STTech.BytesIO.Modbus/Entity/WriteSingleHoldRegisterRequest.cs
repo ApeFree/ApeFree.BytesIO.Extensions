@@ -23,7 +23,7 @@ namespace STTech.BytesIO.Modbus
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());
-            bytes.AddRange(Data.Reverse());
+            bytes.AddRange(Data);
             Payload = bytes.ToArray();
         }
     }

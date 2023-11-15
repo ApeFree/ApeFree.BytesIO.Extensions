@@ -94,7 +94,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteSingleCoilRegisterResponse> WriteSingleCoilRegister(WriteSingleCoilRegisterRequest request, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteSingleCoilRegister(WriteSingleCoilRegisterRequest request, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写单个线圈寄存器
@@ -105,7 +105,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超长时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteSingleCoilRegisterResponse> WriteSingleCoilRegister(byte slaveId, ushort writeAddress, bool data, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteSingleCoilRegister(byte slaveId, ushort writeAddress, bool data, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写单个保持寄存器
@@ -114,7 +114,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteSingleHoldRegisterResponse> WriteSingleHoldRegister(WriteSingleHoldRegisterRequest request, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteSingleHoldRegister(WriteSingleHoldRegisterRequest request, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写单个保持寄存器
@@ -125,7 +125,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteSingleHoldRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写多个线圈寄存器
@@ -134,7 +134,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteMultipleCoilRegistersResponse> WriteMultipleCoilRegisters(WriteMultipleCoilRegistersRequest request, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteMultipleCoilRegisters(WriteMultipleCoilRegistersRequest request, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写多个线圈寄存器
@@ -145,7 +145,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteMultipleCoilRegistersResponse> WriteMultipleCoilRegisters(byte slaveId, ushort writeAddress, bool[] data, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteMultipleCoilRegisters(byte slaveId, ushort writeAddress, bool[] data, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写多个保持寄存器
@@ -154,7 +154,7 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteMultipleHoldRegistersResponse> WriteMultipleHoldRegisters(WriteMultipleHoldRegistersRequest request, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(WriteMultipleHoldRegistersRequest request, int timeout = 3000, SendOptions options = null);
 
         /// <summary>
         /// 写入多个保持寄存器
@@ -166,6 +166,6 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        Reply<WriteMultipleHoldRegistersResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort writeLength, byte[] data, int timeout = 3000, SendOptions options = null);
+        Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort writeLength, byte[] data, int timeout = 3000, SendOptions options = null);
     }
 }

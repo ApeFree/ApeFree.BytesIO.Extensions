@@ -34,6 +34,7 @@
 	  <PackageReference Include="STTech.BytesIO.Serial" Version="2.12.9" />
 	  <PackageReference Include="STTech.BytesIO.Tcp" Version="2.12.9" />
 	  <PackageReference Include="STTech.BytesIO.Udp" Version="2.12.9" />
+	  <PackageReference Include="STTech.CodePlus" Version="1.6.4" />
 	</ItemGroup>
 
 </Project>

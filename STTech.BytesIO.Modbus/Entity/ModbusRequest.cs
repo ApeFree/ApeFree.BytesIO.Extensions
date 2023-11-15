@@ -13,7 +13,7 @@ namespace STTech.BytesIO.Modbus
         /// 从机地址
         /// </summary>
         [Description("从机地址")]
-        public byte SlaveId { get; set; }
+        public byte SlaveId { get; set; } = 1;
 
         /// <summary>
         /// 功能码
@@ -31,7 +31,7 @@ namespace STTech.BytesIO.Modbus
         /// <summary>
         /// 有效荷载
         /// </summary>
-        protected IEnumerable<byte> Payload { get; set; }
+        protected byte[] Payload { get; set; }
 
         /// <summary>
         /// <inheritdoc/>
@@ -52,8 +52,9 @@ namespace STTech.BytesIO.Modbus
                     }
                 case ModbusProtocolFormat.ASCII:
                     {
-                        var line = $":{SlaveId:00}{(byte)FunctionCode:00}{Payload?.ToHexString() ?? ""}";
-                        line = line + Checksum(line) + "\r\n";
+                        SerializePayload();
+                        var line = $":{SlaveId:00}{(byte)FunctionCode:X2}{Payload?.ToHexString() ?? ""}";
+                        line = line + LRC(line) + "\r\n";
                         return line.GetBytes();
                     }
             }
@@ -62,47 +63,28 @@ namespace STTech.BytesIO.Modbus
 
         public abstract void SerializePayload();
 
-        
+
         /// <summary>
         /// ASCII模式校验和
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static string Checksum(string message)
+        public static string LRC(string message)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(message);
-            ushort crc = 0xFFFF;
-
-            for (int i = 0; i < bytes.Length; i++)
+            int sum = 0;
+            string hex = "";
+            int strLen = message.Length;
+            for (int i = 1; i < strLen - 1; i = i + 2)
             {
-                crc ^= bytes[i];
-
-                for (int j = 0; j < 8; j++)
-                {
-                    if ((crc & 0x0001) == 1)
-                    {
-                        crc >>= 1;
-                        crc ^= 0xA001;
-                    }
-                    else
-                    {
-                        crc >>= 1;
-                    }
-                }
+                string temp = message.Substring(i, 2);
+                sum = sum + Convert.ToInt32(temp, 16);
             }
-
-            byte[] checksum = BitConverter.GetBytes(crc);
-
-            // 取校验和的低字节和高字节
-            byte lowByte = checksum[0];
-            byte highByte = checksum[1];
-
-            // 将字节转换为十六进制字符串
-            string lowByteHex = lowByte.ToString("X2");
-            string highByteHex = highByte.ToString("X2");
-
-            // 返回拼接后的校验和字符串
-            return highByteHex + lowByteHex;
+            if (sum >= 256)
+                sum = sum % 256;
+            hex = Convert.ToInt32(~sum + 1).ToString("X");
+            if (hex.Length > 2)
+                hex = hex.Substring(hex.Length - 2, 2);
+            return hex;
         }
 
 
