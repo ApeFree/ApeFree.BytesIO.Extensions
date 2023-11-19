@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace STTech.BytesIO.Modbus
 {
     /// <summary>
-    /// Modbus RTU 客户端
+    /// Modbus Serial 客户端
     /// </summary>
     public partial class ModbusSerialClient : ModbusClient<SerialClient>, IModbusClient
     {
@@ -67,6 +67,9 @@ namespace STTech.BytesIO.Modbus
 
         /// <inheritdoc/>
         public int BaudRate { get => InnerClient.BaudRate; set => InnerClient.BaudRate = value; }
+
+        /// <inheritdoc/>
+        public int ReceiveTimeout { get => InnerClient.ReceiveTimeout; set => InnerClient.ReceiveTimeout = value; }
 
         /// <inheritdoc/>
         public void DiscardInBuffer()

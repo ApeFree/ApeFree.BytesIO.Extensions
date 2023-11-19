@@ -3,13 +3,13 @@
 	<PropertyGroup>
 		<TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
-		<Version>2.12.9-Alpha0721</Version>
+		<Version>2.13.6.1-alpha1116</Version>
 
 		<Company>ApeFree</Company>
 		<Copyright>Copyright © 2022-2023 ApeFree, All Rights Reserved.</Copyright>
 		<PackageIcon>stdiag.png</PackageIcon>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Description>BytesIO Modbus通信库，提供Modbus-RTU/Modbus-TCP通信客户端，支持ReadCoilRegister(读线圈寄存器)、ReadDiscreteInputRegister(读离散输入寄存器)、ReadHoldRegister(读保持寄存器)、ReadInputRegister(读输入寄存器)、WriteSingleCoilRegister(写单个线圈寄存器)、WriteSingleHoldRegister(写单个保持寄存器)、WriteMultipleCoilRegisters(写多个线圈寄存器)、WriteMultipleHoldRegisters(写多个保持寄存器)八种命令的收发操作。</Description>
+		<Description>BytesIO Modbus通信库，提供Modbus-SerialPort/Modbus-TCP通信客户端，支持ASCII、RTU。ReadCoilRegister(读线圈寄存器)、ReadDiscreteInputRegister(读离散输入寄存器)、ReadHoldRegister(读保持寄存器)、ReadInputRegister(读输入寄存器)、WriteSingleCoilRegister(写单个线圈寄存器)、WriteSingleHoldRegister(写单个保持寄存器)、WriteMultipleCoilRegisters(写多个线圈寄存器)、WriteMultipleHoldRegisters(写多个保持寄存器)八种命令的收发操作。</Description>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -30,11 +30,11 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <PackageReference Include="STTech.BytesIO.Core" Version="2.12.9" />
-	  <PackageReference Include="STTech.BytesIO.Serial" Version="2.12.9" />
-	  <PackageReference Include="STTech.BytesIO.Tcp" Version="2.12.9" />
+	  <PackageReference Include="STTech.BytesIO.Core" Version="2.13.6-alpha0807" />
+	  <PackageReference Include="STTech.BytesIO.Serial" Version="2.13.3-alpha0707" />
+	  <PackageReference Include="STTech.BytesIO.Tcp" Version="2.13.3-alpha0707" />
 	  <PackageReference Include="STTech.BytesIO.Udp" Version="2.12.9" />
-	  <PackageReference Include="STTech.CodePlus" Version="1.6.4" />
+	  <PackageReference Include="STTech.CodePlus" Version="1.6.4.3-alpha1016" />
 	</ItemGroup>
 
 </Project>
