@@ -5,10 +5,15 @@ using System.Linq;
 
 namespace STTech.BytesIO.Modbus
 {
+    /// <summary>
+    /// Modbus客户端
+    /// </summary>
     public abstract partial class ModbusClient<TClient> : ModbusClient where TClient : BytesClient
     {
+        /// <summary>
+        /// 内部客户端
+        /// </summary>
         public new TClient InnerClient => (TClient)base.InnerClient;
-        public TClient GetInnerClient() => (TClient)InnerClient;
 
         public ModbusClient(TClient client, ModbusProtocolFormat format) : base(client, format)
         {
@@ -16,15 +21,13 @@ namespace STTech.BytesIO.Modbus
     }
 
     /// <summary>
-    /// Modbus客户端基类
+    /// Modbus客户端
     /// </summary>
     public abstract partial class ModbusClient : VirtualClient
     {
         private ModbusProtocolFormat protocolFormat;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public Unpacker<ModbusResponse> Unpacker { get; }
 
         /// <summary>
