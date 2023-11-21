@@ -33,7 +33,7 @@ namespace STTech.BytesIO.Modbus
         }
 
         /// <inheritdoc/>
-        protected override int CalculatePacketLength(IEnumerable<byte> bytes)
+        protected override int CalculatePacketLength(byte[] bytes)
         {
             if (Format == ModbusProtocolFormat.RTU)
             {
@@ -100,7 +100,7 @@ namespace STTech.BytesIO.Modbus
                 case FunctionCode.ReadDiscreteInputRegister:
                 case FunctionCode.ReadHoldRegister:
                 case FunctionCode.ReadInputRegister:
-                    return rtuFixedHead + 1 + (short)bytes.Skip(rtuFixedHead).First() + checkSumLen;
+                    return rtuFixedHead + 1 + bytes.Skip(rtuFixedHead).First() + checkSumLen;
 
                 case FunctionCode.WriteSingleCoilRegister:
                 case FunctionCode.WriteSingleHoldRegister:
