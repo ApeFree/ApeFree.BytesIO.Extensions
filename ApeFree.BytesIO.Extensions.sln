@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STTech.BytesIO.Modbus", "STTech.BytesIO.Modbus\STTech.BytesIO.Modbus.csproj", "{D13F46D9-AD0D-44B7-B1A5-ABD52F2E83E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.BytesIO.Modbus", "..\..\modbusDemo\Demo.BytesIO\Demo.BytesIO.Modbus\Demo.BytesIO.Modbus.csproj", "{E5F3D755-AE0D-44CD-A3AA-F5403611D502}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STTech.BytesIO.Modbus.Demo", "STTech.BytesIO.Modbus.Demo\STTech.BytesIO.Modbus.Demo.csproj", "{E5F3D755-AE0D-44CD-A3AA-F5403611D502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
