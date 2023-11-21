@@ -12,7 +12,7 @@ namespace STTech.BytesIO.Modbus
 
 
 
-        public ReadCoilRegisterResponse(IEnumerable<byte> bytes) : base(bytes)
+        public ReadCoilRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess)
             {

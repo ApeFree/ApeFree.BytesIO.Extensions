@@ -17,9 +17,9 @@ namespace STTech.BytesIO.Modbus
 
         public bool IsSuccess { get; } = true;
 
-        public byte ErrorCode { get; }
+        public ModbusErrorCode ErrorCode { get; }
 
-        public ModbusResponse(IEnumerable<byte> data) : base(data) // 这里的Bytes只当做原始数据保存
+        public ModbusResponse(byte[] data) : base(data) // 这里的Bytes只当做原始数据保存
         {
             var bytes = data.ToArray();
 
@@ -33,7 +33,7 @@ namespace STTech.BytesIO.Modbus
                 {
                     IsSuccess = false;
                     FunctionCode = (FunctionCode)(code - 0x80);
-                    ErrorCode = bytes.ElementAt(2);
+                    ErrorCode = (ModbusErrorCode)bytes.ElementAt(2);
                     Checksum = BitConverter.ToUInt16(bytes, 3);
                     return;
                 }
@@ -49,7 +49,7 @@ namespace STTech.BytesIO.Modbus
                 {
                     IsSuccess = false;
                     FunctionCode = (FunctionCode)(bytes.ElementAt(1) - 0x80);
-                    ErrorCode = bytes.ElementAt(2);
+                    ErrorCode = (ModbusErrorCode)bytes.ElementAt(2);
                     Checksum = BitConverter.ToUInt16(bytes, 3);
                     return;
                 }

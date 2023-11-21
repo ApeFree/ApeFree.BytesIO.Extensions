@@ -10,7 +10,7 @@ namespace STTech.BytesIO.Modbus
         public byte[] WriteAddress { get; }
         public byte[] Values { get; }
 
-        public WriteRegisterResponse(IEnumerable<byte> bytes) : base(bytes)
+        public WriteRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess)
             {

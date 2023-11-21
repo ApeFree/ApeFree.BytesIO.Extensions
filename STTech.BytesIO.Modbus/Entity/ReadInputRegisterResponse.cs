@@ -10,7 +10,7 @@ namespace STTech.BytesIO.Modbus
         public byte Length { get; }
         public byte[] Values { get; }
 
-        public ReadInputRegisterResponse(IEnumerable<byte> bytes) : base(bytes)
+        public ReadInputRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess) 
             {

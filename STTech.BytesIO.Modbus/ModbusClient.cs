@@ -313,7 +313,7 @@ namespace STTech.BytesIO.Modbus
     }
 
     /// <summary>
-    /// 
+    /// 协议格式
     /// </summary>
     public enum ModbusProtocolFormat
     {
