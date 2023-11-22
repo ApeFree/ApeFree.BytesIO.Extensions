@@ -14,6 +14,7 @@ namespace STTech.BytesIO.Modbus
         [Description("写入长度")]
         public ushort WriteLength { get; set; } = 1;
 
+        [Browsable(false)]
         [Description("写入数据")]
         public byte[] Data { get; set; } = new byte[0];
 

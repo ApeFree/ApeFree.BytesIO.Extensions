@@ -12,8 +12,9 @@ namespace STTech.BytesIO.Modbus
         [Description("写入地址")]
         public ushort WriteAddress { get; set; }
 
+        [Browsable(false)]
         [Description("写入数据")]
-        public bool[] Data { get; set; } = new bool[] { false };
+        public bool[] Data { get; set; } = [false];
 
         public WriteMultipleCoilRegistersRequest() : base(FunctionCode.WriteMultipleCoilRegisters)
         {
