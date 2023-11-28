@@ -38,14 +38,14 @@ namespace STTech.BytesIO.Modbus.Demo
             client.OnDisconnected += Client_OnDisconnected;
             client.OnDataSent += Client_OnDataSent;
             client.OnExceptionOccurs += Client_OnExceptionOccurs;
-            btnNewRequest.DropDownItems.Add("读线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadCoilRegisterRequest());
-            btnNewRequest.DropDownItems.Add("读离散输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadDiscreteInputRegisterRequest());
-            btnNewRequest.DropDownItems.Add("读保持寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadHoldRegisterRequest());
-            btnNewRequest.DropDownItems.Add("读输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadInputRegisterRequest());
-            btnNewRequest.DropDownItems.Add("写单个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleCoilRegisterRequest());
-            btnNewRequest.DropDownItems.Add("写单个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleHoldRegisterRequest());
-            btnNewRequest.DropDownItems.Add("写多个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleCoilRegistersRequest());
-            btnNewRequest.DropDownItems.Add("写多个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleHoldRegistersRequest());
+            btnNewRequest.DropDownItems.Add("[01] 读线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadCoilRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[02] 读离散输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadDiscreteInputRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[03] 读保持寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadHoldRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[04] 读输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadInputRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[05] 写单个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleCoilRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[06] 写单个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleHoldRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[0F] 写多个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleCoilRegistersRequest());
+            btnNewRequest.DropDownItems.Add("[10] 写多个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleHoldRegistersRequest());
             client.OnReadHoldRegisterPacketReceived += Client_OnReadHoldRegisterPacketReceived;
         }
 
