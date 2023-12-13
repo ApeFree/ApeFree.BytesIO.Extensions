@@ -19,7 +19,8 @@ namespace STTech.BytesIO.Modbus
         {
 
         }
-        public override void SerializePayload()
+        /// <inheritdoc/>
+        protected internal override void SerializePayloadHandle()
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(StartAddress).Reverse());

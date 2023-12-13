@@ -9,6 +9,12 @@ namespace STTech.BytesIO.Modbus
     {
         public byte Length { get; }
         public byte[] Values { get; }
+
+        public ushort[] GetUInt16Array()
+        {
+            return Values.Slice(2).Select(ba => BitConverter.ToUInt16(ba.ToArray(), 0)).ToArray();
+        }
+
         public ReadHoldRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess)
@@ -16,7 +22,7 @@ namespace STTech.BytesIO.Modbus
                 Length = Payload.ElementAt(0);
                 Values = Payload.Skip(1).ToArray();
             }
-   
+
         }
     }
 }

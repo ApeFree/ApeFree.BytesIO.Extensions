@@ -14,20 +14,14 @@ namespace STTech.BytesIO.Modbus
         [Description("写入数据")]
         public bool Data { get; set; }
 
-        private const ushort CoilOn = 0xFF00;
-        private const ushort CoilOff = 0x0000;
+        public WriteSingleCoilRegisterRequest() : base(FunctionCode.WriteSingleCoilRegister) { }
 
-        public WriteSingleCoilRegisterRequest() : base(FunctionCode.WriteSingleCoilRegister)
+        /// <inheritdoc/>
+        protected internal override void SerializePayloadHandle()
         {
-        }
-
-        public override void SerializePayload()
-        {
-            var temp = Data ? CoilOn : CoilOff;
-            var value = BitConverter.GetBytes(temp).Reverse();
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());
-            bytes.AddRange(value);
+            bytes.AddRange(Data ? [0xFF, 0x00] : [0x00, 0x00]);
             Payload = bytes.ToArray();
         }
     }

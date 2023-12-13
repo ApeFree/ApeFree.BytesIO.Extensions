@@ -7,14 +7,14 @@ namespace STTech.BytesIO.Modbus
 {
     public class WriteRegisterResponse : ModbusResponse
     {
-        public byte[] WriteAddress { get; }
+        public ushort WriteAddress { get; }
         public byte[] Values { get; }
 
         public WriteRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess)
             {
-                WriteAddress = Payload.Take(2).ToArray();
+                WriteAddress = BitConverter.ToUInt16([bytes[1], bytes[0]], 0);
                 Values = Payload.Skip(2).ToArray();
             }
         }

@@ -15,12 +15,10 @@ namespace STTech.BytesIO.Modbus
         [Description("写入数据")]
         public byte[] Data { get; set; } = new byte[0];
 
-        public WriteSingleHoldRegisterRequest() : base(FunctionCode.WriteSingleHoldRegister)
-        {
+        public WriteSingleHoldRegisterRequest() : base(FunctionCode.WriteSingleHoldRegister) { }
 
-        }
-
-        public override void SerializePayload()
+        /// <inheritdoc/>
+        protected internal override void SerializePayloadHandle()
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());

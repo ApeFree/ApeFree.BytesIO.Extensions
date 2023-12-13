@@ -17,7 +17,8 @@ namespace STTech.BytesIO.Modbus
         [Description("读取长度")]
         public ushort Length { get; set; } = 1;
 
-        public override void SerializePayload()
+        /// <inheritdoc/>
+        protected internal override void SerializePayloadHandle()
         {
             List<byte> bytes = new List<byte>();
             bytes.AddRange(BitConverter.GetBytes(StartAddress).Reverse());
