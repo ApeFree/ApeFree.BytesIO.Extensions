@@ -145,7 +145,98 @@ namespace STTech.BytesIO.Modbus
             return reply.ConvertTo<WriteRegisterResponse>();
         }
 
-        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort writeLength, byte[] data, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort[] values, int timeout = 3000, SendOptions options = null)
+        {
+            var data = values.Select(v => BitConverter.GetBytes(v).Reverse()).SelectMany(v => v).ToArray();
+
+            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+        }
+
+        /// <summary>
+        /// 写入多个保持寄存器
+        /// </summary>
+        /// <param name="slaveId">从站地址</param>
+        /// <param name="writeAddress">写入地址</param>
+        /// <param name="data">写入数据</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
+        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
+        {
+            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+        }
+
+        #endregion
+
+        private bool ReplyMatchHandle(ModbusRequest req, ModbusResponse resp)
+        {
+            if (req.SlaveId != resp.SlaveId)
+            {
+                return false;
+            }
+
+            if (req.FunctionCode != resp.FunctionCode)
+            {
+                return false;
+            }
+
+            if (!resp.IsSuccess)
+            {
+                // 如果请求失败（非通信失败，从机回复故障码），则返回匹配成功（不需要进一步对比寄存器地址）
+                return true;
+            }
+
+            {
+                if (req is WriteMultipleHoldRegistersRequest sd && resp is WriteRegisterResponse rd)
+                {
+                    return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                }
+            }
+
+            {
+                if (req is WriteMultipleCoilRegistersRequest sd && resp is WriteRegisterResponse rd)
+                {
+                    return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                }
+            }
+
+            {
+                if (req is WriteSingleHoldRegisterRequest sd && resp is WriteRegisterResponse rd)
+                {
+                    return sd.WriteAddress == rd.WriteAddress;
+                }
+            }
+
+            {
+                if (req is WriteSingleCoilRegisterRequest sd && resp is WriteRegisterResponse rd)
+                {
+                    return sd.WriteAddress == rd.WriteAddress;
+                }
+            }
+
+            {
+                if (req is ReadInputRegisterRequest sd && resp is ReadInputRegisterResponse rd)
+                {
+                    return true;
+                }
+            }
+
+            {
+                if (req is ReadHoldRegisterRequest sd && resp is ReadHoldRegisterResponse rd)
+                {
+                    return true;
+                }
+            }
+
+            {
+                if (req is ReadDiscreteInputRegisterRequest sd && resp is ReadDiscreteInputRegisterResponse rd)
+                {
+                    return true;
+                }
+            }
+
+            {
+                if (req is ReadCoilRegisterRequest sd && resp is ReadCoilRegisterResponse rd)
         {
             return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, WriteLength = writeLength, Data = data, ProtocolFormat = ProtocolFormat });
         }
