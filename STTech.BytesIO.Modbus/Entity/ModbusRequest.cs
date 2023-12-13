@@ -7,6 +7,9 @@ using System.Text;
 
 namespace STTech.BytesIO.Modbus
 {
+    /// <summary>
+    /// Modbus请求类
+    /// </summary>
     public abstract class ModbusRequest : IRequest
     {
         /// <summary>
@@ -19,14 +22,21 @@ namespace STTech.BytesIO.Modbus
         /// 功能码
         /// </summary>
         [Description("功能码")]
-        protected FunctionCode FunctionCode { get; set; }
+        public FunctionCode FunctionCode { get; protected set; }
 
+        /// <summary>
+        /// 构造Modbus请求对象
+        /// </summary>
+        /// <param name="functionCode">功能码</param>
         protected ModbusRequest(FunctionCode functionCode)
         {
             FunctionCode = functionCode;
         }
 
-        internal ModbusProtocolFormat ProtocolFormat { get; set; }
+        /// <summary>
+        /// 协议格式
+        /// </summary>
+        public ModbusProtocolFormat ProtocolFormat { get; internal set; }
 
         /// <summary>
         /// 有效荷载
@@ -46,13 +56,13 @@ namespace STTech.BytesIO.Modbus
                         List<byte> bytes = new List<byte>();
                         bytes.Add(SlaveId);
                         bytes.Add((byte)FunctionCode);
-                        SerializePayload();
+                        SerializePayloadHandle();
                         bytes.AddRange(Payload);
                         return CRC16(bytes.ToArray());
                     }
                 case ModbusProtocolFormat.ASCII:
                     {
-                        SerializePayload();
+                        SerializePayloadHandle();
                         var line = $":{SlaveId:00}{(byte)FunctionCode:X2}{Payload?.ToHexString() ?? ""}";
                         line = line + LRC(line) + "\r\n";
                         return line.GetBytes();
@@ -61,7 +71,10 @@ namespace STTech.BytesIO.Modbus
             return null;
         }
 
-        public abstract void SerializePayload();
+        /// <summary>
+        /// 序列化有效载荷的方法
+        /// </summary>
+        protected internal abstract void SerializePayloadHandle();
 
 
         /// <summary>
