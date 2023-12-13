@@ -1,5 +1,6 @@
 ﻿using STTech.BytesIO.Core;
 using STTech.BytesIO.Core.Component;
+using System;
 using System.ComponentModel;
 using System.Linq;
 
@@ -52,96 +53,253 @@ namespace STTech.BytesIO.Modbus
         }
     }
 
-    public abstract partial class ModbusClient : IModbusClient
+    public abstract partial class ModbusClient : IUnpackerSupport<ModbusResponse>
     {
+        #region ReadCoilRegister
+
+        /// <summary>
+        /// 读线圈寄存器
+        /// </summary>
+        /// <param name="request">读线圈寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadCoilRegisterResponse> ReadCoilRegister(ReadCoilRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<ReadCoilRegisterResponse>();
         }
 
+        /// <summary>
+        /// 读线圈寄存器
+        /// </summary>
+        /// <param name="slaveId">从机地址</param>
+        /// <param name="startAddress">起始地址</param>
+        /// <param name="length">读取长度</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadCoilRegisterResponse> ReadCoilRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
             return this.ReadCoilRegister(new ReadCoilRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        #endregion
+
+        #region ReadDiscreteInputRegister
+
+        /// <summary>
+        /// 读离散输入寄存器
+        /// </summary>
+        /// <param name="request">读离散输入寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadDiscreteInputRegisterResponse> ReadDiscreteInputRegister(ReadDiscreteInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<ReadDiscreteInputRegisterResponse>();
         }
 
+        /// <summary>
+        /// 读离散输入寄存器
+        /// </summary>
+        /// <param name="slaveId">从机地址</param>
+        /// <param name="startAddress">起始地址</param>
+        /// <param name="length">读取长度</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadDiscreteInputRegisterResponse> ReadDiscreteInputRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
             return this.ReadDiscreteInputRegister(new ReadDiscreteInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        #endregion
+
+        #region ReadHoldRegister
+
+        /// <summary>
+        /// 读保持寄存器
+        /// </summary>
+        /// <param name="request">读保持寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadHoldRegisterResponse> ReadHoldRegister(ReadHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<ReadHoldRegisterResponse>();
         }
 
+        /// <summary>
+        /// 读保持寄存器
+        /// </summary>
+        /// <param name="slaveId">从机地址</param>
+        /// <param name="startAddress">起始地址</param>
+        /// <param name="length">读取长度</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadHoldRegisterResponse> ReadHoldRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
             return this.ReadHoldRegister(new ReadHoldRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        #endregion
+
+        #region ReadInputRegister
+
+        /// <summary>
+        /// 读输入寄存器
+        /// </summary>
+        /// <param name="request">读输入寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadInputRegisterResponse> ReadInputRegister(ReadInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<ReadInputRegisterResponse>();
         }
 
+        /// <summary>
+        /// 读输入寄存器
+        /// </summary>
+        /// <param name="slaveId">从机地址</param>
+        /// <param name="startAddress">起始地址</param>
+        /// <param name="length">读取长度</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<ReadInputRegisterResponse> ReadInputRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
             return this.ReadInputRegister(new ReadInputRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        #endregion
+
+        #region WriteSingleCoilRegister
+
+        /// <summary>
+        /// 写单个线圈寄存器
+        /// </summary>
+        /// <param name="request">写单个线圈寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteSingleCoilRegister(WriteSingleCoilRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<WriteRegisterResponse>();
         }
 
+        /// <summary>
+        /// 写单个线圈寄存器
+        /// </summary>
+        /// <param name="slaveId">从站地址</param>
+        /// <param name="writeAddress">写入地址</param>
+        /// <param name="data">写入值</param>
+        /// <param name="timeout">超长时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteSingleCoilRegister(byte slaveId, ushort writeAddress, bool data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteSingleCoilRegister(new WriteSingleCoilRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat });
+            return this.WriteSingleCoilRegister(new WriteSingleCoilRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        #endregion
+
+        #region WriteSingleHoldRegister
+
+        /// <summary>
+        /// 写单个保持寄存器
+        /// </summary>
+        /// <param name="request">写单个保持寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteSingleHoldRegister(WriteSingleHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<WriteRegisterResponse>();
         }
 
+        /// <summary>
+        /// 写单个保持寄存器
+        /// </summary>
+        /// <param name="slaveId">从站地址</param>
+        /// <param name="writeAddress">写入地址</param>
+        /// <param name="data">写入值</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat });
+            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
+        public Reply<WriteRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, ushort value, int timeout = 3000, SendOptions options = null)
+        {
+            var data = BitConverter.GetBytes(value).Reverse().ToArray()
+                ;
+            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+        }
+
+        #endregion
+
+        #region WriteMultipleCoilRegisters
+
+        /// <summary>
+        /// 写多个线圈寄存器
+        /// </summary>
+        /// <param name="request">写多个线圈寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteMultipleCoilRegisters(WriteMultipleCoilRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<WriteRegisterResponse>();
         }
 
+        /// <summary>
+        /// 写多个线圈寄存器
+        /// </summary>
+        /// <param name="slaveId">从站地址</param>
+        /// <param name="writeAddress">写入地址</param>
+        /// <param name="data">写入值</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteMultipleCoilRegisters(byte slaveId, ushort writeAddress, bool[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteMultipleCoilRegisters(new WriteMultipleCoilRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat });
+            return this.WriteMultipleCoilRegisters(new WriteMultipleCoilRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+
         }
 
+        #endregion
+
+        #region WriteMultipleHoldRegisters
+
+        /// <summary>
+        /// 写多个保持寄存器
+        /// </summary>
+        /// <param name="request">写多个保持寄存器的请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(WriteMultipleHoldRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
             request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, (sd, rd) => sd.SlaveId == rd.SlaveId, options);
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
             return reply.ConvertTo<WriteRegisterResponse>();
         }
 
@@ -237,8 +395,12 @@ namespace STTech.BytesIO.Modbus
 
             {
                 if (req is ReadCoilRegisterRequest sd && resp is ReadCoilRegisterResponse rd)
-        {
-            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest { SlaveId = slaveId, WriteAddress = writeAddress, WriteLength = writeLength, Data = data, ProtocolFormat = ProtocolFormat });
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
