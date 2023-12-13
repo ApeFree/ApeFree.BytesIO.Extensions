@@ -7,16 +7,39 @@ namespace STTech.BytesIO.Modbus
 {
     public class ModbusResponse : Response
     {
+        /// <summary>
+        /// 从机地址
+        /// </summary>
         public ushort SlaveId { get; }
+
+        /// <summary>
+        /// 功能码
+        /// </summary>
         public FunctionCode FunctionCode { get; }
+
+        /// <summary>
+        /// 校验码
+        /// </summary>
         public ushort Checksum { get; }
 
+        /// <summary>
+        /// 有效载荷
+        /// </summary>
         protected byte[] Payload { get; }
 
+        /// <summary>
+        /// 协议格式
+        /// </summary>
         public ModbusProtocolFormat ProtocolFormat { get; }
 
+        /// <summary>
+        /// 请求是否成功
+        /// </summary>
         public bool IsSuccess { get; } = true;
 
+        /// <summary>
+        /// 故障码
+        /// </summary>
         public ModbusErrorCode ErrorCode { get; }
 
         public ModbusResponse(byte[] data) : base(data) // 这里的Bytes只当做原始数据保存
