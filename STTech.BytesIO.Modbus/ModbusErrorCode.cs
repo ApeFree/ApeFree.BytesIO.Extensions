@@ -7,6 +7,13 @@ namespace STTech.BytesIO.Modbus
     /// </summary>
     public enum ModbusErrorCode
     {
+        /// <summary> 
+        /// 没有错误<br/> 
+        /// Default value to indicate no error 
+        /// </summary> 
+        [Description("没有错误 | Default value to indicate no error")]
+        NoError = 0x00,
+
         /// <summary>
         /// 非法功能码<br/>
         /// The function code received in the query is not recognized or allowed by the device
