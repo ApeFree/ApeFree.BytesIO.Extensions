@@ -20,7 +20,6 @@ namespace STTech.BytesIO.Modbus
         [Description("读离散输入寄存器")]
         ReadDiscreteInputRegister = 0x02,
 
-
         /// <summary>
         /// 读保持寄存器
         /// </summary>

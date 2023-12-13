@@ -47,7 +47,6 @@ namespace STTech.BytesIO.Modbus
 
         private static int CalculateAsciiPacketLengthHandler(IEnumerable<byte> bytes)
         {
-
             if (bytes.Count() < 13)
             {
                 return 0;

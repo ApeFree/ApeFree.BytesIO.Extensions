@@ -8,33 +8,23 @@ namespace STTech.BytesIO.Modbus
     /// <summary>
     /// Modbus TCP 客户端
     /// </summary>
-    public partial class ModbusTcpClient : ModbusClient<TcpClient>, IModbusClient
+    public partial class ModbusTcpClient : ModbusClient<TcpClient>
     {
-        public ModbusTcpClient(ModbusProtocolFormat format) : base(new TcpClient(), format)
-        {
-        }
+        public ModbusTcpClient(ModbusProtocolFormat format) : base(new TcpClient(), format) { }
     }
 
     public partial class ModbusTcpClient : ITcpClient
     {
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public string Host { get => InnerClient.Host; set => InnerClient.Host = value; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int Port { get => InnerClient.Port; set => InnerClient.Port = value; }
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public int LocalPort => InnerClient.LocalPort;
 
-        /// <summary>
         /// <inheritdoc/>
-        /// </summary>
         public IPEndPoint RemoteEndPoint => InnerClient.RemoteEndPoint;
     }
 }

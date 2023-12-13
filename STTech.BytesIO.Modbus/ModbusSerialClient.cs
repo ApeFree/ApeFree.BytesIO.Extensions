@@ -10,7 +10,7 @@ namespace STTech.BytesIO.Modbus
     /// <summary>
     /// Modbus Serial 客户端
     /// </summary>
-    public partial class ModbusSerialClient : ModbusClient<SerialClient>, IModbusClient
+    public partial class ModbusSerialClient : ModbusClient<SerialClient>
     {
         public ModbusSerialClient(ModbusProtocolFormat format) : base(new SerialClient(), format) { }
     }
@@ -40,9 +40,6 @@ namespace STTech.BytesIO.Modbus
 
         /// <inheritdoc/>
         public string PortName { get => InnerClient.PortName; set => InnerClient.PortName = value; }
-
-        /// <inheritdoc/>
-        //public bool CDHolding => InnerClient.CDHolding;
 
         /// <inheritdoc/>
         public int ReadTimeout { get => InnerClient.ReadTimeout; set => InnerClient.ReadTimeout = value; }
