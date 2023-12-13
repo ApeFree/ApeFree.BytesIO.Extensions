@@ -149,7 +149,7 @@ namespace STTech.BytesIO.Modbus.Demo
             else if (pgRequest.SelectedObject is WriteMultipleHoldRegistersRequest)
             {
                 var request = pgRequest.SelectedObject as WriteMultipleHoldRegistersRequest;
-                var res = client.WriteMultipleHoldRegisters(request.SlaveId, request.WriteAddress, request.WriteLength, request.Data);
+                var res = client.WriteMultipleHoldRegisters(request.SlaveId, request.WriteAddress, request.Data);
             }
             //client.Send(request.GetBytes());
         }
