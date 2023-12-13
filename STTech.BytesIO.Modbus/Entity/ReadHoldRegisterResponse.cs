@@ -22,7 +22,6 @@ namespace STTech.BytesIO.Modbus
                 Length = Payload.ElementAt(0);
                 Values = Payload.Skip(1).ToArray();
             }
-
         }
     }
 }
