@@ -328,76 +328,91 @@ namespace STTech.BytesIO.Modbus
 
         private bool ReplyMatchHandle(ModbusRequest req, ModbusResponse resp)
         {
-            if (req.SlaveId != resp.SlaveId)
+            try
             {
-                return false;
-            }
-
-            if (req.FunctionCode != resp.FunctionCode)
-            {
-                return false;
-            }
-
-            if (!resp.IsSuccess)
-            {
-                // 如果请求失败（非通信失败，从机回复故障码），则返回匹配成功（不需要进一步对比寄存器地址）
-                return true;
-            }
-
-            {
-                if (req is WriteMultipleHoldRegistersRequest sd && resp is WriteRegisterResponse rd)
+                if (req.SlaveId != resp.SlaveId)
                 {
-                    return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                    return false;
                 }
-            }
 
-            {
-                if (req is WriteMultipleCoilRegistersRequest sd && resp is WriteRegisterResponse rd)
+                if (req.FunctionCode != resp.FunctionCode)
                 {
-                    return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                    return false;
                 }
-            }
 
-            {
-                if (req is WriteSingleHoldRegisterRequest sd && resp is WriteRegisterResponse rd)
+                if (!resp.IsSuccess)
                 {
-                    return sd.WriteAddress == rd.WriteAddress;
-                }
-            }
-
-            {
-                if (req is WriteSingleCoilRegisterRequest sd && resp is WriteRegisterResponse rd)
-                {
-                    return sd.WriteAddress == rd.WriteAddress;
-                }
-            }
-
-            {
-                if (req is ReadInputRegisterRequest sd && resp is ReadInputRegisterResponse rd)
-                {
+                    // 如果请求失败（非通信失败，从机回复故障码），则返回匹配成功（不需要进一步对比寄存器地址）
                     return true;
                 }
-            }
 
-            {
-                if (req is ReadHoldRegisterRequest sd && resp is ReadHoldRegisterResponse rd)
                 {
-                    return true;
+                    if (req is WriteMultipleHoldRegistersRequest sd)
+                    {
+                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                        return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                    }
+                }
+
+                {
+                    if (req is WriteMultipleCoilRegistersRequest sd)
+                    {
+                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                        return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                    }
+                }
+
+                {
+                    if (req is WriteSingleHoldRegisterRequest sd)
+                    {
+                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                        return sd.WriteAddress == rd.WriteAddress;
+                    }
+                }
+
+                {
+                    if (req is WriteSingleCoilRegisterRequest sd)
+                    {
+                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                        return sd.WriteAddress == rd.WriteAddress;
+                    }
+                }
+
+                {
+                    if (req is ReadInputRegisterRequest sd)
+                    {
+                        var rd = new ReadInputRegisterResponse(resp.GetOriginalData());
+                        return true;
+                    }
+                }
+
+                {
+                    if (req is ReadHoldRegisterRequest sd)
+                    {
+                        var rd = new ReadHoldRegisterResponse(resp.GetOriginalData());
+                        return sd.Length == rd.Length / 2;
+                    }
+                }
+
+                {
+                    if (req is ReadDiscreteInputRegisterRequest sd)
+                    {
+                        var rd = new ReadDiscreteInputRegisterResponse(resp.GetOriginalData());
+                        return true;
+                    }
+                }
+
+                {
+                    if (req is ReadCoilRegisterRequest sd)
+                    {
+                        var rd = new ReadCoilRegisterResponse(resp.GetOriginalData());
+                        return true;
+                    }
                 }
             }
-
+            catch (Exception ex)
             {
-                if (req is ReadDiscreteInputRegisterRequest sd && resp is ReadDiscreteInputRegisterResponse rd)
-                {
-                    return true;
-                }
-            }
-
-            {
-                if (req is ReadCoilRegisterRequest sd && resp is ReadCoilRegisterResponse rd)
-                {
-                    return true;
-                }
+                RaiseExceptionOccurs(this, new ExceptionOccursEventArgs(new Exception("Reply match error.", ex)));
             }
 
             return false;
