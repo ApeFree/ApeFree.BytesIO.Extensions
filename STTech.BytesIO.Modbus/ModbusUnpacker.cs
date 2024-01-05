@@ -64,14 +64,14 @@ namespace STTech.BytesIO.Modbus
             {
                 case FunctionCode.ReadCoilRegister:
                 case FunctionCode.ReadDiscreteInputRegister:
-                case FunctionCode.ReadHoldRegister:
+                case FunctionCode.ReadHoldingRegister:
                 case FunctionCode.ReadInputRegister:
                     return asciiFixedHead + 2 + bytes.Skip(asciiFixedHead).First() + checkSumLen + 2;
 
                 case FunctionCode.WriteSingleCoilRegister:
-                case FunctionCode.WriteSingleHoldRegister:
+                case FunctionCode.WriteSingleHoldingRegister:
                 case FunctionCode.WriteMultipleCoilRegisters:
-                case FunctionCode.WriteMultipleHoldRegisters:
+                case FunctionCode.WriteMultipleHoldingRegisters:
                     return asciiFixedHead + 8 + checkSumLen + 2;
 
                 default:
@@ -97,14 +97,14 @@ namespace STTech.BytesIO.Modbus
             {
                 case FunctionCode.ReadCoilRegister:
                 case FunctionCode.ReadDiscreteInputRegister:
-                case FunctionCode.ReadHoldRegister:
+                case FunctionCode.ReadHoldingRegister:
                 case FunctionCode.ReadInputRegister:
                     return rtuFixedHead + 1 + bytes.Skip(rtuFixedHead).First() + checkSumLen;
 
                 case FunctionCode.WriteSingleCoilRegister:
-                case FunctionCode.WriteSingleHoldRegister:
+                case FunctionCode.WriteSingleHoldingRegister:
                 case FunctionCode.WriteMultipleCoilRegisters:
-                case FunctionCode.WriteMultipleHoldRegisters:
+                case FunctionCode.WriteMultipleHoldingRegisters:
                     return rtuFixedHead + 4 + checkSumLen;
 
                 default:

@@ -6,23 +6,21 @@ using System.Text;
 
 namespace STTech.BytesIO.Modbus
 {
-    public class WriteSingleHoldRegisterRequest : ModbusRequest
+    public class WriteSingleHoldingRegisterRequest : ModbusRequest
     {
         [Description("写入地址")]
         public ushort WriteAddress { get; set; }
 
         [Browsable(false)]
         [Description("写入数据")]
-        public byte[] Data { get; set; } = new byte[0];
+        public byte[] Data { get; set; } = new byte[2];
 
-        public WriteSingleHoldRegisterRequest() : base(FunctionCode.WriteSingleHoldRegister) { }
+        public WriteSingleHoldingRegisterRequest() : base(FunctionCode.WriteSingleHoldingRegister) { }
 
         /// <inheritdoc/>
         protected internal override void SerializePayloadHandle()
         {
-            List<byte> bytes = new List<byte>();
-            bytes.AddRange(BitConverter.GetBytes(WriteAddress).Reverse());
-            bytes.AddRange(Data);
+            List<byte> bytes = [.. BitConverter.GetBytes(WriteAddress).Reverse(), .. Data];
             Payload = bytes.ToArray();
         }
     }

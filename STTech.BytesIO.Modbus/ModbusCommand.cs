@@ -24,7 +24,7 @@ namespace STTech.BytesIO.Modbus
         /// 读保持寄存器
         /// </summary>
         [Description("读保持寄存器")]
-        ReadHoldRegister = 0x03,
+        ReadHoldingRegister = 0x03,
 
         /// <summary>
         ///  读输入寄存器
@@ -42,7 +42,7 @@ namespace STTech.BytesIO.Modbus
         /// 写单个保持寄存器
         /// </summary>
         [Description("写单个保持寄存器")]
-        WriteSingleHoldRegister = 0x06,
+        WriteSingleHoldingRegister = 0x06,
 
         /// <summary>
         /// 写多个线圈寄存器
@@ -54,6 +54,6 @@ namespace STTech.BytesIO.Modbus
         /// 写多个保持寄存器
         /// </summary>
         [Description("写多个保持寄存器")]
-        WriteMultipleHoldRegisters = 0x10,
+        WriteMultipleHoldingRegisters = 0x10,
     }
 }
