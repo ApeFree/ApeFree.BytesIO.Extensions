@@ -7,6 +7,8 @@ namespace STTech.BytesIO.Modbus
 {
     public class ModbusResponse : Response
     {
+        private readonly byte[] payload;
+
         /// <summary>
         /// 从机地址
         /// </summary>
@@ -25,7 +27,19 @@ namespace STTech.BytesIO.Modbus
         /// <summary>
         /// 有效载荷
         /// </summary>
-        protected byte[] Payload { get; }
+        protected byte[] Payload
+        {
+            get
+            {
+                // 如果有故障码时获取Payload，则会抛出错误码异常
+                if (ErrorCode != ModbusErrorCode.NoError)
+                {
+                    throw new InvalidOperationException($"Unable to acquire payload. (ErrorCode = {ErrorCode})", new ModbusErrorCodeException(ErrorCode));
+                }
+
+                return payload;
+            }
+        }
 
         /// <summary>
         /// 协议格式
@@ -61,7 +75,7 @@ namespace STTech.BytesIO.Modbus
                     return;
                 }
                 FunctionCode = (FunctionCode)ushort.Parse(bytes.Skip(3).Take(2).EncodeToString());
-                Payload = bytes.Skip(5).Take(bytes.Length - 4).ToArray();
+                payload = bytes.Skip(5).Take(bytes.Length - 4).ToArray();
                 Checksum = ushort.Parse(bytes.Skip(bytes.Length - 4).Take(2).EncodeToString());
             }
             else if (ProtocolFormat == ModbusProtocolFormat.RTU)
@@ -80,7 +94,7 @@ namespace STTech.BytesIO.Modbus
                 FunctionCode = (FunctionCode)bytes.ElementAt(1);
                 var arr = bytes.Skip(2);
                 var payloadLen = arr.Count() - 2;
-                Payload = arr.Take(payloadLen).ToArray();
+                payload = arr.Take(payloadLen).ToArray();
                 Checksum = BitConverter.ToUInt16(bytes.Skip(payloadLen).ToArray(), 0); // 这里可能有问题
             }
         }
