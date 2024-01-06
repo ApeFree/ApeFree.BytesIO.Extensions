@@ -5,9 +5,16 @@ using System.Text;
 
 namespace STTech.BytesIO.Modbus
 {
-    public class ReadInputRegisterResponse : ModbusResponse
+    public class ReadHoldingRegisterResponse : ModbusResponse
     {
+        /// <summary>
+        /// 数据长度
+        /// </summary>
         public byte Length { get; }
+
+        /// <summary>
+        /// 数据
+        /// </summary>
         public byte[] Values { get; }
 
         /// <summary>
@@ -19,14 +26,13 @@ namespace STTech.BytesIO.Modbus
             return Values.Slice(2).Select(ba => BitConverter.ToUInt16(ba.Reverse().ToArray(), 0)).ToArray();
         }
 
-        public ReadInputRegisterResponse(byte[] bytes) : base(bytes)
+        public ReadHoldingRegisterResponse(byte[] bytes) : base(bytes)
         {
-            if (IsSuccess) 
+            if (IsSuccess)
             {
                 Length = Payload.ElementAt(0);
-                Values = Payload.Skip(1).ToArray();
+                Values = Payload.Skip(1).Take(Length).ToArray();
             }
-           
         }
     }
 }
