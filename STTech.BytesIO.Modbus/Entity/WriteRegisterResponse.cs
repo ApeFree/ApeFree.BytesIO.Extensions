@@ -14,7 +14,7 @@ namespace STTech.BytesIO.Modbus
         {
             if (IsSuccess)
             {
-                WriteAddress = BitConverter.ToUInt16([bytes[1], bytes[0]], 0);
+                WriteAddress = BitConverter.ToUInt16([Payload[1], Payload[0]], 0);
                 Values = Payload.Skip(2).ToArray();
             }
         }
