@@ -6,26 +6,11 @@ using System.Text;
 
 namespace STTech.BytesIO.Modbus
 {
-    public class ReadInputRegisterRequest : ModbusRequest
+    public class ReadInputRegisterRequest : ReadRegisterRequest
     {
-        [Description("起始地址")]
-        public ushort StartAddress { get; set; }
-
-        [Description("读取长度")]
-        public ushort Length { get; set; } = 1;
-
-
-        public ReadInputRegisterRequest():base(FunctionCode.ReadInputRegister)
+        public ReadInputRegisterRequest() : base(FunctionCode.ReadInputRegister)
         {
 
-        }
-        /// <inheritdoc/>
-        protected internal override void SerializePayloadHandle()
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.AddRange(BitConverter.GetBytes(StartAddress).Reverse());
-            bytes.AddRange(BitConverter.GetBytes(Length).Reverse());
-            Payload = bytes.ToArray();
         }
     }
 }

@@ -10,8 +10,6 @@ namespace STTech.BytesIO.Modbus
 
         public bool[] Values { get; }
 
-
-
         public ReadCoilRegisterResponse(byte[] bytes) : base(bytes)
         {
             if (IsSuccess)

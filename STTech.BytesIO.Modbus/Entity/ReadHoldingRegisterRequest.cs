@@ -6,9 +6,9 @@ using System.Text;
 
 namespace STTech.BytesIO.Modbus
 {
-    public class ReadDiscreteInputRegisterRequest : ReadRegisterRequest
+    public class ReadHoldingRegisterRequest: ReadRegisterRequest
     {
-        public ReadDiscreteInputRegisterRequest() : base(FunctionCode.ReadDiscreteInputRegister)
+        public ReadHoldingRegisterRequest() : base(FunctionCode.ReadHoldingRegister)
         {
 
         }
