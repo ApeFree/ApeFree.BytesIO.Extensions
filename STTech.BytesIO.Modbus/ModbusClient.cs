@@ -55,6 +55,21 @@ namespace STTech.BytesIO.Modbus
 
     public abstract partial class ModbusClient : IUnpackerSupport<ModbusResponse>
     {
+        /// <summary>
+        /// 发送Modbus请求
+        /// </summary>
+        /// <typeparam name="T">Modbus响应类型</typeparam>
+        /// <param name="request">Modbus请求实体</param>
+        /// <param name="timeout">超时时长(ms)</param>
+        /// <param name="options">发送可选参数</param>
+        /// <returns></returns>
+        public Reply<T> SendModbusRequest<T>(ModbusRequest request, int timeout = 3000, SendOptions options = null) where T : ModbusResponse
+        {
+            request.ProtocolFormat = ProtocolFormat;
+            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
+            return reply.ConvertTo<T>();
+        }
+
         #region ReadCoilRegister
 
         /// <summary>
@@ -66,9 +81,8 @@ namespace STTech.BytesIO.Modbus
         /// <returns></returns>
         public Reply<ReadCoilRegisterResponse> ReadCoilRegister(ReadCoilRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<ReadCoilRegisterResponse>();
+            var reply = SendModbusRequest<ReadCoilRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -98,9 +112,8 @@ namespace STTech.BytesIO.Modbus
         /// <returns></returns>
         public Reply<ReadDiscreteInputRegisterResponse> ReadDiscreteInputRegister(ReadDiscreteInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<ReadDiscreteInputRegisterResponse>();
+            var reply = SendModbusRequest<ReadDiscreteInputRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -119,7 +132,7 @@ namespace STTech.BytesIO.Modbus
 
         #endregion
 
-        #region ReadHoldRegister
+        #region ReadHoldingRegister
 
         /// <summary>
         /// 读保持寄存器
@@ -128,11 +141,10 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<ReadHoldRegisterResponse> ReadHoldRegister(ReadHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
+        public Reply<ReadHoldingRegisterResponse> ReadHoldingRegister(ReadHoldingRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<ReadHoldRegisterResponse>();
+            var reply = SendModbusRequest<ReadHoldingRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -144,9 +156,9 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<ReadHoldRegisterResponse> ReadHoldRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
+        public Reply<ReadHoldingRegisterResponse> ReadHoldingRegister(byte slaveId, ushort startAddress, ushort length, int timeout = 3000, SendOptions options = null)
         {
-            return this.ReadHoldRegister(new ReadHoldRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
+            return this.ReadHoldingRegister(new ReadHoldingRegisterRequest() { SlaveId = slaveId, StartAddress = startAddress, Length = length, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         #endregion
@@ -162,9 +174,8 @@ namespace STTech.BytesIO.Modbus
         /// <returns></returns>
         public Reply<ReadInputRegisterResponse> ReadInputRegister(ReadInputRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<ReadInputRegisterResponse>();
+            var reply = SendModbusRequest<ReadInputRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -215,7 +226,7 @@ namespace STTech.BytesIO.Modbus
 
         #endregion
 
-        #region WriteSingleHoldRegister
+        #region WriteSingleHoldingRegister
 
         /// <summary>
         /// 写单个保持寄存器
@@ -224,11 +235,10 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<WriteRegisterResponse> WriteSingleHoldRegister(WriteSingleHoldRegisterRequest request, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteSingleHoldingRegister(WriteSingleHoldingRegisterRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<WriteRegisterResponse>();
+            var reply = SendModbusRequest<WriteRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -240,16 +250,15 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<WriteRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteSingleHoldingRegister(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+            return this.WriteSingleHoldingRegister(new WriteSingleHoldingRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
-        public Reply<WriteRegisterResponse> WriteSingleHoldRegister(byte slaveId, ushort writeAddress, ushort value, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteSingleHoldingRegister(byte slaveId, ushort writeAddress, ushort value, int timeout = 3000, SendOptions options = null)
         {
-            var data = BitConverter.GetBytes(value).Reverse().ToArray()
-                ;
-            return this.WriteSingleHoldRegister(new WriteSingleHoldRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+            var data = BitConverter.GetBytes(value).Reverse().ToArray();
+            return this.WriteSingleHoldingRegister(new WriteSingleHoldingRegisterRequest { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         #endregion
@@ -265,9 +274,8 @@ namespace STTech.BytesIO.Modbus
         /// <returns></returns>
         public Reply<WriteRegisterResponse> WriteMultipleCoilRegisters(WriteMultipleCoilRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<WriteRegisterResponse>();
+            var reply = SendModbusRequest<WriteRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
         /// <summary>
@@ -287,7 +295,7 @@ namespace STTech.BytesIO.Modbus
 
         #endregion
 
-        #region WriteMultipleHoldRegisters
+        #region WriteMultipleHoldingRegisters
 
         /// <summary>
         /// 写多个保持寄存器
@@ -296,18 +304,17 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(WriteMultipleHoldRegistersRequest request, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteMultipleHoldingRegisters(WriteMultipleHoldingRegistersRequest request, int timeout = 3000, SendOptions options = null)
         {
-            request.ProtocolFormat = ProtocolFormat;
-            var reply = this.Send(request, timeout, ReplyMatchHandle, options);
-            return reply.ConvertTo<WriteRegisterResponse>();
+            var reply = SendModbusRequest<WriteRegisterResponse>(request, timeout, options);
+            return reply;
         }
 
-        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, ushort[] values, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteMultipleHoldingRegisters(byte slaveId, ushort writeAddress, ushort[] values, int timeout = 3000, SendOptions options = null)
         {
             var data = values.Select(v => BitConverter.GetBytes(v).Reverse()).SelectMany(v => v).ToArray();
 
-            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+            return this.WriteMultipleHoldingRegisters(new WriteMultipleHoldingRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         /// <summary>
@@ -319,13 +326,19 @@ namespace STTech.BytesIO.Modbus
         /// <param name="timeout">超时时长(ms)</param>
         /// <param name="options">发送可选参数</param>
         /// <returns></returns>
-        public Reply<WriteRegisterResponse> WriteMultipleHoldRegisters(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
+        public Reply<WriteRegisterResponse> WriteMultipleHoldingRegisters(byte slaveId, ushort writeAddress, byte[] data, int timeout = 3000, SendOptions options = null)
         {
-            return this.WriteMultipleHoldRegisters(new WriteMultipleHoldRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
+            return this.WriteMultipleHoldingRegisters(new WriteMultipleHoldingRegistersRequest() { SlaveId = slaveId, WriteAddress = writeAddress, Data = data, ProtocolFormat = ProtocolFormat }, timeout, options);
         }
 
         #endregion
 
+        /// <summary>
+        /// Modbus的请求与响应匹配过程
+        /// </summary>
+        /// <param name="req"></param>
+        /// <param name="resp"></param>
+        /// <returns></returns>
         private bool ReplyMatchHandle(ModbusRequest req, ModbusResponse resp)
         {
             try
@@ -346,67 +359,68 @@ namespace STTech.BytesIO.Modbus
                     return true;
                 }
 
+                // 读取类型
                 {
-                    if (req is WriteMultipleHoldRegistersRequest sd)
+                    if (req is ReadRegisterRequest sd)
                     {
-                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                        return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                        switch (req.FunctionCode)
+                        {
+                            case FunctionCode.ReadCoilRegister:
+                                {
+                                    //var rd = new ReadCoilRegisterResponse(resp.GetOriginalData());
+                                    return true;
+                                }
+                            case FunctionCode.ReadDiscreteInputRegister:
+                                {
+                                    //var rd = new ReadDiscreteInputRegisterResponse(resp.GetOriginalData());
+                                    return true;
+                                }
+                            case FunctionCode.ReadHoldingRegister:
+                                {
+                                    var rd = new ReadHoldingRegisterResponse(resp.GetOriginalData());
+                                    return sd.Length == rd.Length / 2;
+                                }
+                            case FunctionCode.ReadInputRegister:
+                                {
+                                    var rd = new ReadInputRegisterResponse(resp.GetOriginalData());
+                                    return sd.Length == rd.Length / 2;
+                                }
+                        }
                     }
                 }
 
+                // 写入类型
                 {
-                    if (req is WriteMultipleCoilRegistersRequest sd)
                     {
-                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                        return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                        if (req is WriteMultipleHoldingRegistersRequest sd)
+                        {
+                            var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                        }
                     }
-                }
 
-                {
-                    if (req is WriteSingleHoldRegisterRequest sd)
                     {
-                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                        return sd.WriteAddress == rd.WriteAddress;
+                        if (req is WriteMultipleCoilRegistersRequest sd)
+                        {
+                            var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                        }
                     }
-                }
 
-                {
-                    if (req is WriteSingleCoilRegisterRequest sd)
                     {
-                        var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                        return sd.WriteAddress == rd.WriteAddress;
+                        if (req is WriteSingleHoldingRegisterRequest sd)
+                        {
+                            var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                            return sd.WriteAddress == rd.WriteAddress;
+                        }
                     }
-                }
 
-                {
-                    if (req is ReadInputRegisterRequest sd)
                     {
-                        var rd = new ReadInputRegisterResponse(resp.GetOriginalData());
-                        return true;
-                    }
-                }
-
-                {
-                    if (req is ReadHoldRegisterRequest sd)
-                    {
-                        var rd = new ReadHoldRegisterResponse(resp.GetOriginalData());
-                        return sd.Length == rd.Length / 2;
-                    }
-                }
-
-                {
-                    if (req is ReadDiscreteInputRegisterRequest sd)
-                    {
-                        var rd = new ReadDiscreteInputRegisterResponse(resp.GetOriginalData());
-                        return true;
-                    }
-                }
-
-                {
-                    if (req is ReadCoilRegisterRequest sd)
-                    {
-                        var rd = new ReadCoilRegisterResponse(resp.GetOriginalData());
-                        return true;
+                        if (req is WriteSingleCoilRegisterRequest sd)
+                        {
+                            var rd = new WriteRegisterResponse(resp.GetOriginalData());
+                            return sd.WriteAddress == rd.WriteAddress;
+                        }
                     }
                 }
             }
@@ -443,7 +457,7 @@ namespace STTech.BytesIO.Modbus
         /// 当接收到读保持寄存器响应数据包时触发事件
         /// </summary>
         [Description("当接收到读保持寄存器响应数据包时触发事件")]
-        public event PacketReceivedHandler<ReadHoldRegisterResponse> OnReadHoldRegisterPacketReceived;
+        public event PacketReceivedHandler<ReadHoldingRegisterResponse> OnReadHoldingRegisterPacketReceived;
 
         /// <summary>
         /// 当接收到读输入寄存器响应数据包时触发事件
@@ -461,7 +475,7 @@ namespace STTech.BytesIO.Modbus
         /// 当接收到写单个保持寄存器响应数据包时触发事件
         /// </summary>
         [Description("当接收到写单个保持寄存器响应数据包时触发事件")]
-        public event PacketReceivedHandler<WriteRegisterResponse> OnWriteSingleHoldRegisterPacketReceived;
+        public event PacketReceivedHandler<WriteRegisterResponse> OnWriteSingleHoldingRegisterPacketReceived;
 
         /// <summary>
         /// 当接收到写多个线圈寄存器响应数据包时触发事件
@@ -473,7 +487,7 @@ namespace STTech.BytesIO.Modbus
         /// 当接收到写多个保持寄存器响应数据包时触发事件
         /// </summary>
         [Description("当接收到写多个保持寄存器响应数据包时触发事件")]
-        public event PacketReceivedHandler<WriteRegisterResponse> OnWriteMultipleHoldRegistersPacketReceived;
+        public event PacketReceivedHandler<WriteRegisterResponse> OnWriteMultipleHoldingRegistersPacketReceived;
 
         /// <summary>
         /// 触发接收到Modbus响应数据包的事件
@@ -502,9 +516,9 @@ namespace STTech.BytesIO.Modbus
         /// <summary>
         /// 触发当接收到读保持寄存器响应数据包的事件
         /// </summary>
-        protected void RaiseReadHoldRegisterPacketReceived(object sender, PacketReceivedEventArgs<ReadHoldRegisterResponse> e)
+        protected void RaiseReadHoldingRegisterPacketReceived(object sender, PacketReceivedEventArgs<ReadHoldingRegisterResponse> e)
         {
-            SafelyInvokeCallback(() => OnReadHoldRegisterPacketReceived?.Invoke(sender, e));
+            SafelyInvokeCallback(() => OnReadHoldingRegisterPacketReceived?.Invoke(sender, e));
         }
 
         /// <summary>
@@ -526,9 +540,9 @@ namespace STTech.BytesIO.Modbus
         /// <summary>
         /// 触发当接收到写单个保持寄存器响应数据包的事件
         /// </summary>
-        protected void RaiseWriteSingleHoldRegisterPacketReceived(object sender, PacketReceivedEventArgs<WriteRegisterResponse> e)
+        protected void RaiseWriteSingleHoldingRegisterPacketReceived(object sender, PacketReceivedEventArgs<WriteRegisterResponse> e)
         {
-            SafelyInvokeCallback(() => OnWriteSingleHoldRegisterPacketReceived?.Invoke(sender, e));
+            SafelyInvokeCallback(() => OnWriteSingleHoldingRegisterPacketReceived?.Invoke(sender, e));
         }
 
         /// <summary>
@@ -542,9 +556,9 @@ namespace STTech.BytesIO.Modbus
         /// <summary>
         /// 触发当接收到写多个保持寄存器响应数据包的事件
         /// </summary>
-        protected void RaiseWriteMultipleHoldRegistersPacketReceived(object sender, PacketReceivedEventArgs<WriteRegisterResponse> e)
+        protected void RaiseWriteMultipleHoldingRegistersPacketReceived(object sender, PacketReceivedEventArgs<WriteRegisterResponse> e)
         {
-            SafelyInvokeCallback(() => OnWriteMultipleHoldRegistersPacketReceived?.Invoke(sender, e));
+            SafelyInvokeCallback(() => OnWriteMultipleHoldingRegistersPacketReceived?.Invoke(sender, e));
         }
 
         protected void Unpacker_OnDataParsed(object sender, DataParsedEventArgs<ModbusResponse> e)
@@ -558,8 +572,8 @@ namespace STTech.BytesIO.Modbus
                 case FunctionCode.ReadDiscreteInputRegister:
                     RaiseReadDiscreteInputRegisterPacketReceived(sender, new PacketReceivedEventArgs<ReadDiscreteInputRegisterResponse>(new ReadDiscreteInputRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
-                case FunctionCode.ReadHoldRegister:
-                    RaiseReadHoldRegisterPacketReceived(sender, new PacketReceivedEventArgs<ReadHoldRegisterResponse>(new ReadHoldRegisterResponse(e.Data.GetOriginalData().ToArray())));
+                case FunctionCode.ReadHoldingRegister:
+                    RaiseReadHoldingRegisterPacketReceived(sender, new PacketReceivedEventArgs<ReadHoldingRegisterResponse>(new ReadHoldingRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
                 case FunctionCode.ReadInputRegister:
                     RaiseReadInputRegisterPacketReceived(sender, new PacketReceivedEventArgs<ReadInputRegisterResponse>(new ReadInputRegisterResponse(e.Data.GetOriginalData().ToArray())));
@@ -567,14 +581,14 @@ namespace STTech.BytesIO.Modbus
                 case FunctionCode.WriteSingleCoilRegister:
                     RaiseWriteSingleCoilRegisterPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
-                case FunctionCode.WriteSingleHoldRegister:
-                    RaiseWriteSingleHoldRegisterPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
+                case FunctionCode.WriteSingleHoldingRegister:
+                    RaiseWriteSingleHoldingRegisterPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
                 case FunctionCode.WriteMultipleCoilRegisters:
                     RaiseWriteMultipleCoilRegistersPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
-                case FunctionCode.WriteMultipleHoldRegisters:
-                    RaiseWriteMultipleHoldRegistersPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
+                case FunctionCode.WriteMultipleHoldingRegisters:
+                    RaiseWriteMultipleHoldingRegistersPacketReceived(sender, new PacketReceivedEventArgs<WriteRegisterResponse>(new WriteRegisterResponse(e.Data.GetOriginalData().ToArray())));
                     break;
             }
         }
