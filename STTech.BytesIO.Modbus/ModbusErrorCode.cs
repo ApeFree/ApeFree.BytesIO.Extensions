@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace STTech.BytesIO.Modbus
 {
@@ -81,5 +83,22 @@ namespace STTech.BytesIO.Modbus
         /// </summary>
         [Description("网关目标设备未响应 | Specialized for Modbus gateways. No response was received from the target device")]
         GatewayTargetDeviceFailedToRespond = 0x0B,
+    }
+
+    public static class ModbusErrorCodeExtensions
+    {
+        /// <summary>
+        /// 获取错误码的描述
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public static string GetErrorDescription(this ModbusErrorCode code)
+        {
+            Type enumType = typeof(ModbusErrorCode);
+            FieldInfo fieldInfo = enumType.GetField(code.ToString());
+            DescriptionAttribute attr = fieldInfo.GetCustomAttribute<DescriptionAttribute>();
+
+            return attr == null ? string.Empty : attr.Description;
+        }
     }
 }
