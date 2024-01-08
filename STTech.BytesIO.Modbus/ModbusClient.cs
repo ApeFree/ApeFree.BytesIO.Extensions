@@ -395,7 +395,7 @@ namespace STTech.BytesIO.Modbus
                         if (req is WriteMultipleHoldingRegistersRequest sd)
                         {
                             var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length == rd.Values.Length;
+                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 2 == rd.GetUInt16();
                         }
                     }
 
@@ -403,7 +403,7 @@ namespace STTech.BytesIO.Modbus
                         if (req is WriteMultipleCoilRegistersRequest sd)
                         {
                             var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 8 == rd.Values.Length;
+                            return sd.WriteAddress == rd.WriteAddress && sd.Data.Length / 2 == rd.GetUInt16();
                         }
                     }
 
@@ -411,7 +411,7 @@ namespace STTech.BytesIO.Modbus
                         if (req is WriteSingleHoldingRegisterRequest sd)
                         {
                             var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                            return sd.WriteAddress == rd.WriteAddress;
+                            return sd.WriteAddress == rd.WriteAddress && rd.Values.SequenceEqual(sd.Data);
                         }
                     }
 
@@ -419,7 +419,7 @@ namespace STTech.BytesIO.Modbus
                         if (req is WriteSingleCoilRegisterRequest sd)
                         {
                             var rd = new WriteRegisterResponse(resp.GetOriginalData());
-                            return sd.WriteAddress == rd.WriteAddress;
+                            return sd.WriteAddress == rd.WriteAddress && rd.GetUInt16() == (sd.Data ? 1 : 0);
                         }
                     }
                 }

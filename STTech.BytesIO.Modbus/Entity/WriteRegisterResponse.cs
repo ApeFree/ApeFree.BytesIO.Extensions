@@ -18,5 +18,14 @@ namespace STTech.BytesIO.Modbus
                 Values = Payload.Skip(2).ToArray();
             }
         }
+
+        /// <summary>
+        /// 获取由转数据转换的ushort值
+        /// </summary>
+        /// <returns></returns>
+        public ushort GetUInt16()
+        {
+            return BitConverter.ToUInt16([Values[1], Values[0]], 0);
+        }
     }
 }
