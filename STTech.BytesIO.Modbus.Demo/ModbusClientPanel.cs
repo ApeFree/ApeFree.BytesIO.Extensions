@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using STTech.BytesIO.Core;
 using STTech.BytesIO.Core.Component;
 using STTech.BytesIO.Modbus;
+using STTech.BytesIO.Modbus.Monitors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace STTech.BytesIO.Modbus.Demo
 {
@@ -21,6 +23,7 @@ namespace STTech.BytesIO.Modbus.Demo
     {
         private readonly ModbusClient client;
         private readonly ApeFormsDialogProvider dialogProvider;
+
         private ModbusClientPanel()
         {
             InitializeComponent();
@@ -38,20 +41,15 @@ namespace STTech.BytesIO.Modbus.Demo
             client.OnDisconnected += Client_OnDisconnected;
             client.OnDataSent += Client_OnDataSent;
             client.OnExceptionOccurs += Client_OnExceptionOccurs;
+
             btnNewRequest.DropDownItems.Add("[01] 读线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadCoilRegisterRequest());
             btnNewRequest.DropDownItems.Add("[02] 读离散输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadDiscreteInputRegisterRequest());
-            btnNewRequest.DropDownItems.Add("[03] 读保持寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadHoldRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[03] 读保持寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadHoldingRegisterRequest());
             btnNewRequest.DropDownItems.Add("[04] 读输入寄存器", null, (s, e) => pgRequest.SelectedObject = new ReadInputRegisterRequest());
             btnNewRequest.DropDownItems.Add("[05] 写单个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleCoilRegisterRequest());
-            btnNewRequest.DropDownItems.Add("[06] 写单个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleHoldRegisterRequest());
+            btnNewRequest.DropDownItems.Add("[06] 写单个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteSingleHoldingRegisterRequest());
             btnNewRequest.DropDownItems.Add("[0F] 写多个线圈寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleCoilRegistersRequest());
-            btnNewRequest.DropDownItems.Add("[10] 写多个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleHoldRegistersRequest());
-            client.OnReadHoldRegisterPacketReceived += Client_OnReadHoldRegisterPacketReceived;
-        }
-
-        private void Client_OnReadHoldRegisterPacketReceived(object sender, PacketReceivedEventArgs<ReadHoldRegisterResponse> e)
-        {
-            Print($"收到读取保持寄存器的结果：{JsonConvert.SerializeObject(e.Data)}");
+            btnNewRequest.DropDownItems.Add("[10] 写多个保持寄存器", null, (s, e) => pgRequest.SelectedObject = new WriteMultipleHoldingRegistersRequest());
         }
 
         private void Client_OnDataReceived(object sender, DataReceivedEventArgs e)
@@ -95,7 +93,7 @@ namespace STTech.BytesIO.Modbus.Demo
         {
             var request = pgRequest.SelectedObject;
             panelRequest.Enabled = request != null;
-            btnEditHex.Visible = request is WriteSingleHoldRegisterRequest || request is WriteMultipleHoldRegistersRequest;
+            btnEditHex.Visible = request is WriteSingleHoldingRegisterRequest || request is WriteMultipleHoldingRegistersRequest;
         }
 
         private void Print(string msg)
@@ -103,55 +101,113 @@ namespace STTech.BytesIO.Modbus.Demo
             tbLog.AppendText($"[{DateTime.Now}] {msg}\r\n");
         }
 
+        private void Print<T>(Reply<T> reply) where T : ModbusResponse
+        {
+            if (reply.Exception == null)
+            {
+                var resp = reply.GetResponse();
+                string values = string.Empty;
+                if (resp.IsSuccess)
+                {
+                    switch (resp.FunctionCode)
+                    {
+                        case FunctionCode.ReadCoilRegister:
+                            {
+                                var r = new ReadCoilRegisterResponse(resp.GetOriginalData());
+                                values = r.Values.Select(v => v.ToString()).Join(", ");
+                            }
+                            break;
+                        case FunctionCode.ReadDiscreteInputRegister:
+                            {
+                                var r = new ReadDiscreteInputRegisterResponse(resp.GetOriginalData());
+                                values = r.Values.Select(v => v.ToString()).Join(", ");
+                            }
+                            break;
+                        case FunctionCode.ReadHoldingRegister:
+                            {
+                                var r = new ReadHoldingRegisterResponse(resp.GetOriginalData());
+                                values = r.GetUInt16Array().Select(v => v.ToString()).Join(", ");
+                            }
+                            break;
+                        case FunctionCode.ReadInputRegister:
+                            {
+                                var r = new ReadInputRegisterResponse(resp.GetOriginalData());
+                                values = r.GetUInt16Array().Select(v => v.ToString()).Join(", ");
+                            }
+                            break;
+                        case FunctionCode.WriteSingleCoilRegister:
+                        case FunctionCode.WriteSingleHoldingRegister:
+                        case FunctionCode.WriteMultipleHoldingRegisters:
+                        case FunctionCode.WriteMultipleCoilRegisters:
+                            {
+                                var r = new WriteRegisterResponse(resp.GetOriginalData());
+                                values = r.GetUInt16().ToString();
+                            }
+                            break;
+                    }
+                    Print($"Status={reply.Status}, Code={resp.FunctionCode}, Values={values}");
+                }
+                else
+                {
+                    Print($"Status={reply.Status}, Code={resp.FunctionCode}, Error=[{resp.ErrorCode}]{resp.ErrorCode.GetErrorDescription()}");
+                }
+            }
+            else
+            {
+                Print($"Status={reply.Status}, Exception={reply.Exception}");
+            }
+        }
+
         private void btnSend_Click(object sender, EventArgs e)
         {
-            //var reply = client.ReadCoilRegister(1, 1, 1, 3000);
-            //if (reply.Status == ReplyStatus.Completed)
-            //{
-            //    var resp = reply.GetResponse();
-            //}
-
             if (pgRequest.SelectedObject is ReadCoilRegisterRequest)
             {
                 var request = pgRequest.SelectedObject as ReadCoilRegisterRequest;
-                var res = client.ReadCoilRegister(request.SlaveId, request.StartAddress, request.Length);
+                var reply = client.ReadCoilRegister(request.SlaveId, request.StartAddress, request.Length);
+                Print(reply);
             }
             else if (pgRequest.SelectedObject is ReadDiscreteInputRegisterRequest)
             {
                 var request = pgRequest.SelectedObject as ReadDiscreteInputRegisterRequest;
-                var res = client.ReadDiscreteInputRegister(request.SlaveId, request.StartAddress, request.Length);
+                var reply = client.ReadDiscreteInputRegister(request.SlaveId, request.StartAddress, request.Length);
+                Print(reply);
             }
-            else if (pgRequest.SelectedObject is ReadHoldRegisterRequest)
+            else if (pgRequest.SelectedObject is ReadHoldingRegisterRequest)
             {
-                var request = pgRequest.SelectedObject as ReadHoldRegisterRequest;
-                var res = client.ReadHoldRegister(request.SlaveId, request.StartAddress, request.Length);
+                var request = pgRequest.SelectedObject as ReadHoldingRegisterRequest;
+                var reply = client.ReadHoldingRegister(request.SlaveId, request.StartAddress, request.Length);
+                Print(reply);
             }
             else if (pgRequest.SelectedObject is ReadInputRegisterRequest)
             {
                 var request = pgRequest.SelectedObject as ReadInputRegisterRequest;
-                var res = client.ReadInputRegister(request.SlaveId, request.StartAddress, request.Length);
+                var reply = client.ReadInputRegister(request.SlaveId, request.StartAddress, request.Length);
+                Print(reply);
             }
             else if (pgRequest.SelectedObject is WriteSingleCoilRegisterRequest)
             {
                 var request = pgRequest.SelectedObject as WriteSingleCoilRegisterRequest;
-                var res = client.WriteSingleCoilRegister(request.SlaveId, request.WriteAddress, request.Data);
+                var reply = client.WriteSingleCoilRegister(request.SlaveId, request.WriteAddress, request.Data);
+                Print(reply);
             }
-            else if (pgRequest.SelectedObject is WriteSingleHoldRegisterRequest)
+            else if (pgRequest.SelectedObject is WriteSingleHoldingRegisterRequest)
             {
-                var request = pgRequest.SelectedObject as WriteSingleHoldRegisterRequest;
-                var res = client.WriteSingleHoldRegister(request.SlaveId, request.WriteAddress, request.Data);
+                var request = pgRequest.SelectedObject as WriteSingleHoldingRegisterRequest;
+                var reply = client.WriteSingleHoldingRegister(request.SlaveId, request.WriteAddress, request.Data);
+                Print(reply);
             }
             else if (pgRequest.SelectedObject is WriteMultipleCoilRegistersRequest)
             {
                 var request = pgRequest.SelectedObject as WriteMultipleCoilRegistersRequest;
-                var res = client.WriteMultipleCoilRegisters(request.SlaveId, request.WriteAddress, request.Data);
+                var reply = client.WriteMultipleCoilRegisters(request.SlaveId, request.WriteAddress, request.Data);
+                Print(reply);
             }
-            else if (pgRequest.SelectedObject is WriteMultipleHoldRegistersRequest)
+            else if (pgRequest.SelectedObject is WriteMultipleHoldingRegistersRequest)
             {
-                var request = pgRequest.SelectedObject as WriteMultipleHoldRegistersRequest;
-                var res = client.WriteMultipleHoldRegisters(request.SlaveId, request.WriteAddress, request.Data);
+                var request = pgRequest.SelectedObject as WriteMultipleHoldingRegistersRequest;
+                var reply = client.WriteMultipleHoldingRegisters(request.SlaveId, request.WriteAddress, request.Data);
+                Print(reply);
             }
-            //client.Send(request.GetBytes());
         }
 
         private void btnClean_Click(object sender, EventArgs e)
@@ -183,11 +239,11 @@ namespace STTech.BytesIO.Modbus.Demo
             {
                 var bytes = dialog.Result.Data.HexStringToBytes();
                 var request = pgRequest.SelectedObject;
-                if (request is WriteSingleHoldRegisterRequest req1)
+                if (request is WriteSingleHoldingRegisterRequest req1)
                 {
                     req1.Data = bytes;
                 }
-                else if (request is WriteMultipleHoldRegistersRequest req2)
+                else if (request is WriteMultipleHoldingRegistersRequest req2)
                 {
                     req2.Data = bytes;
                 }

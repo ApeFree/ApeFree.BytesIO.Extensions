@@ -52,18 +52,6 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="STTech.BytesIO.Core, Version=2.14.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STTech.BytesIO.Core.2.14.1-beta1128\lib\net45\STTech.BytesIO.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="STTech.BytesIO.Serial, Version=2.14.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STTech.BytesIO.Serial.2.14.1-beta1128\lib\net45\STTech.BytesIO.Serial.dll</HintPath>
-    </Reference>
-    <Reference Include="STTech.BytesIO.Tcp, Version=2.14.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STTech.BytesIO.Tcp.2.14.1-beta1128\lib\net45\STTech.BytesIO.Tcp.dll</HintPath>
-    </Reference>
-    <Reference Include="STTech.CodePlus, Version=1.6.4.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\STTech.CodePlus.1.6.4.3-alpha1016\lib\net45\STTech.CodePlus.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -146,6 +134,22 @@
     <None Include="Resources\ic_edit.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\STTech.BytesIO\STTech.BytesIO.Core\STTech.BytesIO.Core.csproj">
+      <Project>{2dd119d7-42ed-486d-81cd-3b908041185e}</Project>
+      <Name>STTech.BytesIO.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\STTech.BytesIO\STTech.BytesIO.Serial\STTech.BytesIO.Serial.csproj">
+      <Project>{040d665e-a81f-46c2-903d-2a2c83138430}</Project>
+      <Name>STTech.BytesIO.Serial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\STTech.BytesIO\STTech.BytesIO.Tcp\STTech.BytesIO.Tcp.csproj">
+      <Project>{94f0f307-1ee8-4de0-86e1-8be335035693}</Project>
+      <Name>STTech.BytesIO.Tcp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\STTech.CodePlus\STTech.CodePlus\STTech.CodePlus.csproj">
+      <Project>{f1b836ee-34b4-49e7-a236-59ed6c96a95a}</Project>
+      <Name>STTech.CodePlus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\STTech.BytesIO.Modbus\STTech.BytesIO.Modbus.csproj">
       <Project>{d13f46d9-ad0d-44b7-b1a5-abd52f2e83e9}</Project>
       <Name>STTech.BytesIO.Modbus</Name>
