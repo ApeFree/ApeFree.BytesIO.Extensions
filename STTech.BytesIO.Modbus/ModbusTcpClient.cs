@@ -26,5 +26,8 @@ namespace STTech.BytesIO.Modbus
 
         /// <inheritdoc/>
         public IPEndPoint RemoteEndPoint => InnerClient.RemoteEndPoint;
+
+        /// <inheritdoc/>
+        public IPEndPoint LocalEndPoint { get => InnerClient.LocalEndPoint; set => InnerClient.LocalEndPoint = value; }
     }
 }
